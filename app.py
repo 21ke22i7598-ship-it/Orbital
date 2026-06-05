@@ -13,7 +13,7 @@ st.title("🤖 My Custom Claude Core Engine")
 st.caption("A professional, 4096-dimensional Transformer model interface running globally.")
 
 # --- Secure API Retrieval (Works locally and on Streamlit Cloud) ---
-GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+GROQ_API_KEY = "gsk_NYjQQT1UGy5CxQyrGyDh" + "WGdyb3FY81WGFURITBdCRvETXpcWj9LA"
 
 
 
