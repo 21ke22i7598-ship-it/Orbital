@@ -16,10 +16,7 @@ st.caption("A professional, 4096-dimensional Transformer model interface running
 import os
 os.environ["GROQ_API_KEY"] = "gsk_NYjQQT1UGy5CxQyrGyDh" + "WGdyb3FY81WGFURITBdCRvETXpcWj9LA"
 GROQ_API_KEY = os.environ["GROQ_API_KEY"]
-
-# --- Backend Model Initialization ---
-def load_ai_brain():
-    cfg = ModelConfig()
+cfg = ModelConfig()
     layer = ClaudeTransformerBlock(cfg)
     freqs_cis = precompute_theta_pos_frequencies(cfg.dim // cfg.n_heads, cfg.max_seq_len)
     mask = torch.full((cfg.max_seq_len, cfg.max_seq_len), float("-inf"))
