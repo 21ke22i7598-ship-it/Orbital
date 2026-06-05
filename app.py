@@ -87,8 +87,12 @@ if user_input := st.chat_input("Message your custom AI..."):
 
 ---
 ### 🛠️ Core Architecture Metrics:
+st.markdown("""
+### 🛠️ Core Architecture Metrics:
 * **Token Matrix Input Layout:** `{list(embedded_space.shape)}` (Processed into 4,096 dimensions)
 * **Attention Layer Verification Check:** `{list(brain_output.shape)}` (Transformer grid validated successfully!)
+    """)
+
     try:
         response_placeholder.markdown(full_display)
         st.session_state.messages.append({"role": "assistant", "content": full_display})
