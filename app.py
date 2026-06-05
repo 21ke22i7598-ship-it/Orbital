@@ -89,10 +89,10 @@ if user_input := st.chat_input("Message your custom AI..."):
 ### 🛠️ Core Architecture Metrics:
 * **Token Matrix Input Layout:** `{list(embedded_space.shape)}` (Processed into 4,096 dimensions)
 * **Attention Layer Verification Check:** `{list(brain_output.shape)}` (Transformer grid validated successfully!)
-"""
-                    response_placeholder.markdown(full_display)
-                    st.session_state.messages.append({"role": "assistant", "content": full_display})
-                  except Exception as e:
-                    # Your brand new clean custom greeting response holder
-                    response_placeholder.markdown("Hello! How can I assist you today?")
-                    st.session_state.messages.append({"role": "assistant", "content": "Hello! How can I assist you today?"})
+    try:
+        response_placeholder.markdown(full_display)
+        st.session_state.messages.append({"role": "assistant", "content": full_display})
+    except Exception as e:
+        # Your brand new clean custom greeting response holder
+        response_placeholder.markdown("Hello! How can I assist you today?")
+        st.session_state.messages.append({"role": "assistant", "content": "Hello! How can I assist you today?"})
