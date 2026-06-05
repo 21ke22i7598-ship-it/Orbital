@@ -13,12 +13,9 @@ st.title("🤖 My Custom Claude Core Engine")
 st.caption("A professional, 4096-dimensional Transformer model interface running globally.")
 
 # --- Secure API Retrieval (Works locally and on Streamlit Cloud) ---
-GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", os.environ.get("GROQ_API_KEY", ""))
+GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
-if not GROQ_API_KEY:
-    st.info("💡 **Setup Note:** Paste your Groq API key in the sidebar to activate the global brain!")
-    with st.sidebar:
-        GROQ_API_KEY = st.text_input("Enter Groq API Key (gsk_...):", type="password")
+
 
 # --- Backend Model Initialization ---
 @st.cache_resource
