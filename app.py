@@ -79,11 +79,11 @@ if user_input := st.chat_input("Message your custom AI..."):
                         }
                     )
                     
-                    with urllib.request.urlopen(req, timeout=10) as response:
-                        res_body = json.loads(response.read().decode("utf-8"))
-                        output_text = res_body["choices"][0]["message"]["content"]
-                    
-                  full_display = f"{output_text}"
+                   with urllib.request.urlopen(req, timeout=10) as response:
+        res_body = json.loads(response.read().decode("utf-8"))
+        output_text = res_body["choices"][0]["message"]["content"]
+
+    full_display = f"{output_text}"
 
     st.markdown(f"""
 ---
