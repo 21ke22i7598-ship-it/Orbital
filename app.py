@@ -13,12 +13,11 @@ st.title("🤖 My Custom Claude Core Engine")
 st.caption("A professional, 4096-dimensional Transformer model interface running globally.")
 
 # --- Secure API Retrieval (Works locally and on Streamlit Cloud) ---
-GROQ_API_KEY = "gsk_NYjQQT1UGy5CxQyrGyDh" + "WGdyb3FY81WGFURITBdCRvETXpcWj9LA"
-
-
+import os
+os.environ["GROQ_API_KEY"] = "gsk_NYjQQT1UGy5CxQyrGyDh" + "WGdyb3FY81WGFURITBdCRvETXpcWj9LA"
+GROQ_API_KEY = os.environ["GROQ_API_KEY"]
 
 # --- Backend Model Initialization ---
-@st.cache_resource
 def load_ai_brain():
     cfg = ModelConfig()
     layer = ClaudeTransformerBlock(cfg)
