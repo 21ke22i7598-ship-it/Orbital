@@ -83,7 +83,7 @@ if user_input := st.chat_input("Message your custom AI..."):
                         res_body = json.loads(response.read().decode("utf-8"))
                         output_text = res_body["choices"][0]["message"]["content"]
                     
-                    full_display = f"""{output_text}
+                    full_display = f"{output_text}"
 
 ---
 ### 🛠️ Core Architecture Metrics:
