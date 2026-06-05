@@ -75,8 +75,8 @@ if user_input := st.chat_input("Ask Orbital anything..."):
         response_placeholder.markdown(full_display)
         st.session_state.messages.append({"role": "assistant", "content": full_display})
 
-    except Exception as e:
-        # Fallback response if API fails or key is missing
-        fallback_text = "Hello! How can I assist you today?"
-        response_placeholder.markdown(fallback_text)
-        st.session_state.messages.append({"role": "assistant", "content": fallback_text})
+   except Exception as e:
+        # Temporary debugger to see why the API is failing
+        error_message = f"API Connection Error: {str(e)}"
+        response_placeholder.markdown(error_message)
+        st.session_state.messages.append({"role": "assistant", "content": error_message})
