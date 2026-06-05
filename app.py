@@ -83,11 +83,10 @@ if user_input := st.chat_input("Message your custom AI..."):
                         res_body = json.loads(response.read().decode("utf-8"))
                         output_text = res_body["choices"][0]["message"]["content"]
                     
-                    full_display = f"{output_text}"
+                  full_display = f"{output_text}"
 
+    st.markdown(f"""
 ---
-### 🛠️ Core Architecture Metrics:
-st.markdown("""
 ### 🛠️ Core Architecture Metrics:
 * **Token Matrix Input Layout:** `{list(embedded_space.shape)}` (Processed into 4,096 dimensions)
 * **Attention Layer Verification Check:** `{list(brain_output.shape)}` (Transformer grid validated successfully!)
