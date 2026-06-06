@@ -43,7 +43,7 @@ if user_input := st.chat_input("Ask Orbital anything..."):
     url = "https://api.groq.com/openai/v1/chat/completions"
     req_data = json.dumps({
         "model": "llama3-8b-8192",
-        "messages": st.session_state.messages
+        "messages":[{"role": "user", "content": user_input}]
     }).encode("utf-8")
 
     # Upgraded headers containing the User-Agent browser string to prevent 403 Forbidden blocks
