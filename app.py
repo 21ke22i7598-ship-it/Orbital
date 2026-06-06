@@ -46,10 +46,12 @@ if user_input := st.chat_input("Ask Orbital anything..."):
         "messages": st.session_state.messages
     }).encode("utf-8")
 
+    # Upgraded headers containing the User-Agent browser string to prevent 403 Forbidden blocks
     req = urllib.request.Request(
         url,
         data=req_data,
         headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
             "Content-Type": "application/json",
             "Authorization": f"Bearer {GROQ_API_KEY}"
         }
