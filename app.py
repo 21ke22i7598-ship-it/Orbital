@@ -2,7 +2,7 @@ import streamlit as st
 import random
 
 st.set_page_config(page_title="Orbital AI", page_icon="🚀", layout="centered")
-st.title("🚀 Orbital AI: The World's First AI madeFrom a 9 year old.")
+st.title("🚀 Orbital AI: The World's First AI made from a 9 year old.")
 st.write("Operating on a fully independent local framework.")
 
 if "messages" not in st.session_state:
