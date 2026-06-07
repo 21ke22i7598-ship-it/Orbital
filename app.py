@@ -3,7 +3,7 @@ import urllib.request
 import urllib.parse
 
 st.set_page_config(page_title="Orbital AI", page_icon="🚀", layout="centered")
-st.title("🚀 Orbital AI: The World's First AI made from a 9 year old.")
+st.title("🚀 Orbital AI: The World's First AI made by a 9 year old.")
 st.write("Equipped with fluid human conversation logic!")
 
 if "messages" not in st.session_state:
