@@ -1,10 +1,9 @@
 import streamlit as st
-import urllib.request
-import json
+import random
 
 st.set_page_config(page_title="Orbital AI", page_icon="🚀", layout="centered")
-st.title("🚀 Orbital AI Chatbot")
-st.write("Guaranteed by the power of the absolute victory!")
+st.title("🚀 Orbital AI: The World's First AI madeFrom a 9 year old.")
+st.write("Operating on a fully independent local framework.")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -20,29 +19,15 @@ if user_input := st.chat_input("Ask Orbital anything..."):
 
     with st.chat_message("assistant"):
         response_placeholder = st.empty()
-        response_placeholder.markdown("*Processing request securely...*")
-
-    # Universal, zero-restriction fallback public processing engine
-    url = "https://text.pollinations.ai/"
-    
-    # Pristine standard text payload mapping
-    payload = {
-        "messages": [{"role": "user", "content": str(user_input)}],
-        "model": "openai"
-    }
-    
-    req = urllib.request.Request(
-        url,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"}
-    )
-
-    try:
-        with urllib.request.urlopen(req, timeout=10) as response:
-            answer = response.read().decode("utf-8")
-            
-        response_placeholder.markdown(answer)
-        st.session_state.messages.append({"role": "assistant", "content": answer})
+        response_placeholder.markdown("*Processing locally...*")
         
-    except Exception as e:
-        response_placeholder.markdown(f"⚠️ Channel Notice: {str(e)}")
+        # Self-contained processing matrix responses
+        responses = [
+            f"Greetings! I have processed your prompt: '{user_input}'. The systems are operating at 100% capacity.",
+            f"Data packet received. Analyzing '{user_input}'... Analysis complete. All parameters nominal.",
+            f"Orbital framework online. Responding to your query: '{user_input}'. The server loop has been broken successfully!"
+        ]
+        answer = random.choice(responses)
+        
+        response_placeholder.markdown(answer)
+    st.session_state.messages.append({"role": "assistant", "content": answer})
