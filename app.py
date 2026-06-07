@@ -4,7 +4,7 @@ import json
 
 st.set_page_config(page_title="Orbital AI", page_icon="🚀", layout="centered")
 st.title("🚀 Orbital AI: The World's First AI made from a 9 year old.")
-st.write("Powered by a live, unrestricted natural conversation engine.")
+st.write("Powered by a live, hyper-stable global AI engine.")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -20,18 +20,18 @@ if user_input := st.chat_input("Chat with Orbital naturally..."):
 
     with st.chat_message("assistant"):
         response_placeholder = st.empty()
-        response_placeholder.markdown("*Thinking naturally...*")
+        response_placeholder.markdown("*Thinking with global AI matrix...*")
         
         try:
-            # Connect directly to the free, live web AI gateway
-            url = "https://text.pollinations.ai/"
+            # Ultra-stable server gateway that does not block cloud IPs
+            url = "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta"
+            
+            # High-grade system prompt instructing it to behave exactly like a human friend
+            full_prompt = f"<|system|>\nYou are a cool, human-like AI assistant named Orbital AI. Speak naturally like a real friend. Do not use robotic code fillers.</s>\n<|user|>\n{user_input}</s>\n<|assistant|>\n"
             
             payload = {
-                "messages": [
-                    {"role": "system", "content": "You are a helpful, human-like AI assistant named Orbital AI. Talk like a real, cool human friend."},
-                    {"role": "user", "content": str(user_input)}
-                ],
-                "private": True
+                "inputs": full_prompt,
+                "parameters": {"max_new_tokens": 250, "temperature": 0.7}
             }
             
             req = urllib.request.Request(
@@ -44,10 +44,17 @@ if user_input := st.chat_input("Chat with Orbital naturally..."):
             )
             
             with urllib.request.urlopen(req, timeout=15) as response:
-                answer = response.read().decode("utf-8")
+                result = json.loads(response.read().decode("utf-8"))
                 
+                # Splicing out the raw generated text cleanly
+                if isinstance(result, list) and len(result) > 0:
+                    generated_text = result[0].get("generated_text", "")
+                    answer = generated_text.split("<|assistant|>\n")[-1].strip()
+                else:
+                    answer = "I'm processing that data packet. Try typing it once more!"
+                    
         except Exception as e:
-            answer = "My network link is adjusting. Let's try that message one more time!"
+            answer = "Connection is adjusting its bandwidth. Give it another spin!"
             
         response_placeholder.markdown(answer)
     st.session_state.messages.append({"role": "assistant", "content": answer})
