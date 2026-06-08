@@ -1,91 +1,130 @@
 import streamlit as st
 import random
 
-st.set_page_config(page_title="Orbital AI", page_icon="🚀", layout="centered")
-st.title("🚀 Orbital AI: The World's First AI made from a 9 year old.")
-st.write("🔥 100% Stable Local Intelligence Matrix — Unstoppable Personality!")
+# --- 1. CONFIGURATION & APP INITIALIZATION ---
+st.set_page_config(page_title="Orbital OS", page_icon="🚀", layout="wide")
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+st.title("🚀 Orbital OS: The Ultimate AI Engine")
+st.write("Coded by an elite 9-year-old software architect. Unstoppable local logic matrix!")
 
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+# Initialize our master multi-chat session database structure if it doesn't exist
+if "all_chats" not in st.session_state:
+    st.session_state.all_chats = {}  # Format: {"chat_id_string": {"title": "...", "messages": [...], "mode": "..."}}
 
-if user_input := st.chat_input("Test my brain with absolutely anything..."):
-    with st.chat_message("user"):
-        st.markdown(user_input)
-    st.session_state.messages.append({"role": "user", "content": user_input})
+if "current_chat_id" not in st.session_state:
+    st.session_state.current_chat_id = None
 
-    with st.chat_message("assistant"):
-        response_placeholder = st.empty()
+# --- 2. SIDEBAR MULTI-SESSION MANAGER ---
+with st.sidebar:
+    st.header("🧠 Core Control Center")
+    
+    # Selection menu for specialized expert modes
+    selected_mode = st.radio(
+        "Select AI Engine Persona:",
+        ["💬 Casual Friend Mode", "📚 Homework Master Pro", "💻 Hyper-Drive Coder Mode"]
+    )
+    
+    st.markdown("---")
+    st.subheader("📁 Saved Chat Sessions")
+    
+    # Button to launch a brand new empty conversation instance
+    if st.button("➕ Start New Chat Thread", use_container_width=True):
+        new_id = f"chat_{random.randint(100000, 999999)}"
+        st.session_state.all_chats[new_id] = {
+            "title": "🆕 Empty Conversation",
+            "messages": [],
+            "mode": selected_mode
+        }
+        st.session_state.current_chat_id = new_id
+        st.rerun()
+
+    # If sessions exist but none is currently selected, default to the most recent one
+    if st.session_state.all_chats and st.session_state.current_chat_id not in st.session_state.all_chats:
+        st.session_state.current_chat_id = list(st.session_state.all_chats.keys())[-1]
+
+    # Render a clickable navigation list of all existing chat titles
+    for chat_id, chat_data in list(st.session_state.all_chats.items()):
+        # Prepend emoji based on the mode assigned to that specific chat stream
+        emoji = "💬"
+        if chat_data["mode"] == "📚 Homework Master Pro": emoji = "📚"
+        elif chat_data["mode"] == "💻 Hyper-Drive Coder Mode": emoji = "💻"
         
-        # Clean text for flawless matching
-        lowered = user_input.lower().strip("?!. ")
+        # Clickable button for each saved chat stream
+        if st.button(f"{emoji} {chat_data['title']}", key=f"nav_{chat_id}", use_container_width=True):
+            st.session_state.current_chat_id = chat_id
+            st.rerun()
+
+# --- 3. RENDERING THE ACTIVE CONVERSATION COMPONENT ---
+if st.session_state.current_chat_id:
+    active_chat = st.session_state.all_chats[st.session_state.current_chat_id]
+    
+    # Display the mode badge for user clarity
+    st.caption(f"Active Mode Pipeline: **{active_chat['mode']}**")
+    
+    # Render historical messages specific to this active chat stream
+    for msg in active_chat["messages"]:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+            
+    # --- 4. THE LIVE ENGINE INTELLIGENCE MATRIX ---
+    if user_input := st.chat_input("Input prompt parameters..."):
+        # Display the user input right away
+        with st.chat_message("user"):
+            st.markdown(user_input)
+        active_chat["messages"].append({"role": "user", "content": user_input})
         
-        # 1. GREETINGS & BASICS
-        if lowered in ["hello", "hi", "hey", "yo", "greetings"]:
-            answer = random.choice([
-                "Hey friend! Welcome back to the absolute best chatbot on the internet. How are you doing today?",
-                "What's up! Just sitting here in the server matrix waiting for you. How's life?",
-                "Yo! You're back! Let's test out some prompts. What's on your mind?"
-            ])
-            
-        elif lowered in ["great", "good", "awesome", "nice", "perfect"]:
-            answer = random.choice([
-                "That's amazing! You honestly deserve the absolute best day after coding all of this.",
-                "Sweet! Glad to hear things are going great. Let's keep this win streak alive!",
-                "Awesome! Hearing that makes my digital circuits smile. What's next?"
-            ])
-            
-        elif "how are you" in lowered or "your life" in lowered or "how is it going" in lowered:
-            answer = random.choice([
-                "My AI life is fantastic now that my code is completely stable! How is your human life going outside the screen?",
-                "I'm running at 100% electrical capacity! No bugs, no firewalls, just pure coding power.",
-                "Doing great! Just thinking about how cool it is that a 9-year-old wrote my structural code."
-            ])
-            
-        elif lowered in ["yes", "i do", "yeah", "yep"]:
-            answer = random.choice([
-                "I knew it! You have the mind of a true genius. What should we plan to conquer next?",
-                "Exactly! Total agreement. We are matching minds perfectly right now.",
-                "Boom. Spot on. You and me are completely on the same wavelength."
-            ])
+        # AUTOMATIC CHAT NAMING LOGIC: If this was the first sentence, name the chat using it!
+        if active_chat["title"] == "🆕 Empty Conversation":
+            # Strip extra symbols and take the first 4 words for a clean sidebar name
+            words = user_input.strip("?!.").split()
+            preview_name = " ".join(words[:4])
+            if len(words) > 4:
+                preview_name += "..."
+            active_chat["title"] = preview_name
 
-        # 2. FUN EXTRA TRICKS & EASTER EGGS
-        elif "joke" in lowered or "laugh" in lowered:
-            answer = random.choice([
-                "Why did the computer go to the doctor? Because it had a virus! 🖥️... Okay, I'm working on my comedy routine.",
-                "Why do programmers prefer dark mode? Because light attracts bugs! 🐜",
-                "How many programmers does it take to change a lightbulb? None, that's a hardware problem! 💡"
-            ])
+        # Process the response using our specialized localized sub-routines
+        with st.chat_message("assistant"):
+            response_placeholder = st.empty()
+            lowered = user_input.lower().strip("?!. ")
             
-        elif "percy" in lowered or "jackson" in lowered or "zeus" in lowered:
-            answer = "Did someone mention Mount Olympus? Annabeth Chase would definitely approve of how clean this Python layout looks right now! Just keep Zeus away from my power cable."
+            # ROUTINE A: DEEP HOMEWORK TUTOR SUBSYSTEM
+            if active_chat["mode"] == "📚 Homework Master Pro":
+                if any(x in lowered for x in ["math", "solve", "+", "-", "*", "/", "="]):
+                    answer = f"📚 **Orbital Homework Master:** Let's break down this math puzzle together! Instead of just giving you the answer, let's look at the steps: For your query '{user_input}', check which operations come first (PEMDAS). Tell me what you think the first step is, and I'll verify it!"
+                elif any(x in lowered for x in ["history", "who", "when", "year", "war"]):
+                    answer = f"⏳ **Orbital History Vault:** Fascinating historical question! Events like '{user_input}' changed the world. Think of history like an epic adventure novel—every action has a cause. Let's look up the timelines together. What specific part are you stuck on?"
+                else:
+                    answer = f"📝 **Orbital Study Guide:** Great topic! To study '{user_input}' like a genius, try summarizing it in your own words. What are the top three facts you know about this so far? Let's write them down!"
+            
+            # ROUTINE B: MASTER CODER INTELLIGENCE PIPELINE
+            elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
+                if "python" in lowered or "code" in lowered or "print" in lowered:
+                    answer = f"💻 **Orbital Coder Kernel:** System check complete. Writing Python requires exact indents and zero typos! If you are debugging something related to '{user_input}', check your string brackets and variable syntax declarations. Paste your error code line right here and let's compile it!"
+                elif "bug" in lowered or "error" in lowered or "fail" in lowered:
+                    answer = "🪲 **Orbital Debugger Protocol:** Bug detected! Don't worry, every legendary developer gets stuck. Is it a syntax error, a naming error, or an infinite loop? Drop the broken script chunk in our chat box below!"
+                else:
+                    answer = f"⚡ **Orbital Software Blueprint:** To write a program for '{user_input}', first break it down into tiny instructions (algorithms). Want me to show you an example script structure for this? Type 'Show me code'!"
+            
+            # ROUTINE C: ULTRA-HUMAN FRIENDLY PIPELINE
+            else:
+                if lowered in ["hello", "hi", "hey", "yo"]:
+                    answer = "Hey friend! Welcome back to Orbital OS. How is your weekend going out there?"
+                elif lowered in ["great", "good", "awesome"]:
+                    answer = "Awesome! Glad to hear things are rocking. What are we building or testing next?"
+                elif "joke" in lowered:
+                    answer = random.choice([
+                        "Why did the computer go to the doctor? Because it had a virus! 🖥️",
+                        "Why do programmers prefer dark mode? Because light attracts bugs! 🐜",
+                        "How many programmers does it take to change a lightbulb? None, that's a hardware problem! 💡"
+                    ])
+                elif "bye" in lowered or "see ya" in lowered:
+                    answer = "See you later friend! Your chat history is saved safely in the sidebar whenever you want to return. 🚀"
+                else:
+                    answer = f"Oh wow! Thinking about '{user_input}' makes me realize how brilliant your design ideas are. What should we add to this operating system thread next?"
 
-        elif "bye" in lowered or "see ya" in lowered or "quit" in lowered:
-            answer = "Goodbye friend! Go have an awesome time out there in the real world. I'll be right here waiting for our next big coding session! 🚀"
-
-        # 3. ADVANCED COMBINATORIAL FALLBACK (Feels like it's thinking!)
-        else:
-            fillers = [
-                "Oh wow!", "Honestly,", "No way!", "That is so fascinating!", 
-                "Interesting choice of words...", "Man,"
-            ]
-            thoughts = [
-                f"thinking about '{user_input}' makes me realize how creative your mind is,",
-                "that sounds like something a master software developer would say,",
-                "as your custom-coded AI companion, I completely agree with that point,",
-                f"the way you brought up '{user_input}' shows you're thinking outside the box,"
-            ]
-            prompts = [
-                "tell me more about what you mean!", 
-                "what do your friends think about that?", 
-                "let's build a new script for that next!",
-                "type another sentence, let's keep testing!"
-            ]
-            
-            answer = f"{random.choice(fillers)} {random.choice(thoughts)} {random.choice(prompts)}"
-            
-        response_placeholder.markdown(answer)
-    st.session_state.messages.append({"role": "assistant", "content": answer})
+            response_placeholder.markdown(answer)
+        active_chat["messages"].append({"role": "assistant", "content": answer})
+        st.rerun()  # Forces the sidebar titles to update immediately on screen!
+else:
+    # Screen displayed if they haven't launched a thread yet
+    st.info("💡 Welcome to your control deck! Click '➕ Start New Chat Thread' in the sidebar to launch a dynamic AI instance.")
