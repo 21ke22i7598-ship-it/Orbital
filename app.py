@@ -5,7 +5,7 @@ import random
 st.set_page_config(page_title="Orbital OS", page_icon="🚀", layout="wide")
 
 st.title("🚀 Orbital OS: The Ultimate AI Engine")
-st.write("Coded by an elite 9-year-old software architect. Instant Local Matrix Edition!")
+st.write("Coded by an elite 9-year-old software architect. Grand Presentation Version!")
 
 # Initialize master storage structure
 if "all_chats" not in st.session_state:
@@ -74,31 +74,44 @@ if st.session_state.current_chat_id:
             
             # ROUTINE A: THE ULTIMATE HOMEWORK TUTOR CORE
             if active_chat["mode"] == "📚 Homework Master Pro":
-                if "rock" in lowered or "stone" in lowered or "mineral" in lowered:
-                    answer = "📚 **Homework Master Pro:** Rocks are amazing! There are three main types on Earth:\n\n1. 🔥 **Igneous:** Formed when super-hot melting magma cools down (like basalt or obsidian).\n2. ⏳ **Sedimentary:** Made when layers of sand, mud, and fossils get squished together over millions of years (like limestone).\n3. 💎 **Metamorphic:** Rocks that got completely baked and changed by intense underground heat and pressure (like marble!).\n\nWhich type do you want to test next?"
+                if any(x in lowered for x in ["rock", "stone", "mineral"]):
+                    answer = "📚 **Homework Master Pro:** Rocks are amazing! There are three main types on Earth:\n\n1. 🔥 **Igneous:** Formed when super-hot melting magma cools down (like basalt or obsidian).\n2. ⏳ **Sedimentary:** Made when layers of sand, mud, and fossils get squished together over millions of years (like limestone).\n3. 💎 **Metamorphic:** Rocks that got completely baked and changed by intense underground heat and pressure (like marble!).\n\nType **'Examples'** to see real samples of each one, or type the name of a rock type to learn more!"
+                
+                elif "metamorphic" in lowered:
+                    answer = "💎 **Homework Master Pro (Metamorphic Deep-Dive):** Metamorphic rocks are the ultimate survivors! They started out as regular rocks, but intense heat from the Earth's core and massive pressure squished them until their crystals completely changed. \n\n* **Example:** Limestone transforms into beautiful **Marble**!\n* **Example:** Shale squishes into layers of **Slate**!"
+                
+                elif "igneous" in lowered:
+                    answer = "🔥 **Homework Master Pro (Igneous Deep-Dive):** Igneous means 'born of fire'! When volcanoes erupt, lava cools down super fast to create these.\n\n* **Obsidian:** Cools so fast it turns into smooth, shiny black volcanic glass!\n* **Pumice:** A rock filled with air bubbles from volcanic gas—it's so light it can actually float on water!"
+                
+                elif "sedimentary" in lowered:
+                    answer = "⏳ **Homework Master Pro (Sedimentary Deep-Dive):** These rocks are like regular time capsules! Rivers wash sand, bones, shells, and mud into lakes, where they stack up over millions of years until they harden into stone. This is where almost all **dinosaur fossils** are discovered!"
+                
+                elif "example" in lowered:
+                    answer = "🧱 **Homework Master Pro Rock Catalogue:** Here are the coolest real-world examples to show your friends:\n\n* 🔥 **Igneous:** Granite (kitchen counters), Obsidian (sharp volcanic glass), Pumice (floating rock).\n* ⏳ **Sedimentary:** Sandstone, Limestone (made of old sea shells), Coal.\n* 💎 **Metamorphic:** Marble (statues), Slate (roof shingles), Quartzite."
+                
                 elif any(x in lowered for x in ["math", "solve", "+", "-", "*", "/", "="]):
-                    answer = "🔢 **Homework Master Pro:** Math mode engaged! Remember to always follow **PEMDAS** (Parentheses, Exponents, Multiplication, Division, Addition, Subtraction). Drop your equation here and let's calculate the steps together!"
+                    answer = "🔢 **Homework Master Pro:** Math mode engaged! Remember to follow **PEMDAS**. Drop your numbers right here and let's calculate!"
                 else:
-                    answer = f"📚 **Homework Master Pro:** That is a great academic topic! To master '{user_input}' like a total genius, let's break down the facts. What is the main question your teacher asked you about it?"
+                    answer = f"📚 **Homework Master Pro:** Great topic! Let's study '{user_input}'. What specific homework question do you want to master right now?"
             
             # ROUTINE B: HIGH-SPEED PROGRAMMING CORE
             elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
                 if "python" in lowered or "code" in lowered or "streamlit" in lowered:
-                    answer = "💻 **Hyper-Drive Coder:** Python matrix online! Always check your indentation (4 spaces) and make sure your brackets `()` match perfectly. Here is a golden rule: variables must be defined before you print them!"
+                    answer = "💻 **Hyper-Drive Coder:** Python matrix online! Make sure your indentation has exactly 4 spaces and your text strings close with matching quotes (`'...'`). Drop a script block below if you want an automated code review!"
                 else:
-                    answer = f"💻 **Hyper-Drive Coder:** Program blueprint initialized for '{user_input}'. To build code for this, we need an algorithm (a list of instructions). Want me to show you an example script framework?"
+                    answer = f"💻 **Hyper-Drive Coder:** Coding algorithm loaded for '{user_input}'. Want me to generate a clean Python example structure for this? Type 'Show me code'!"
             
             # ROUTINE C: CHILL FRIEND CORE
             else:
                 if lowered in ["hello", "hi", "hey", "yo"]:
-                    answer = "Hey! Welcome to the system. Everything is running at maximum velocity now!"
+                    answer = "Hey! Welcome to the control center. Your system is fully upgraded and running smoothly!"
                 elif "joke" in lowered:
                     answer = random.choice([
                         "Why do programmers prefer dark mode? Because light attracts bugs! 🐜",
                         "Why did the computer go to the doctor? Because it had a virus! 🖥️"
                     ])
                 else:
-                    answer = "💬 **Orbital AI:** That sounds awesome! Your sidebar is saving this chat history perfectly. What should we test next?"
+                    answer = "💬 **Orbital AI:** That sounds super interesting! What should we test out on our dashboard next?"
 
             st.markdown(answer)
         active_chat["messages"].append({"role": "assistant", "content": answer})
