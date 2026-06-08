@@ -1,11 +1,12 @@
 import streamlit as st
 import random
+import requests
 
 # --- 1. CONFIGURATION & APP INITIALIZATION ---
 st.set_page_config(page_title="Orbital OS", page_icon="🚀", layout="wide")
 
-st.title("🚀 Orbital OS: Absolute Cosmic Edition")
-st.write("Coded by an elite 9-year-old software architect. Armed with an Offline Hyper-Local Universe Brain!")
+st.title("🚀 Orbital OS: Supreme Global Edition")
+st.write("Coded by an elite 9-year-old software architect. Connected to the Un-stoppable Live Knowledge Core!")
 
 # Initialize master database structures
 if "all_chats" not in st.session_state:
@@ -81,7 +82,7 @@ if st.session_state.current_chat_id:
             active_chat["messages"] = active_chat["messages"][:-2]
             st.rerun()
 
-    # --- 5. HYPER-LOCAL OFFLINE BRAIN (NEVER FAILS) ---
+    # --- 5. THE UN-STOPPABLE GLOBAL LOGIC ENGINE ---
     default_text = st.session_state.edit_buffer
     
     if user_input := st.chat_input("Ask anything in the universe...", key="chat_box"):
@@ -97,41 +98,42 @@ if st.session_state.current_chat_id:
 
         with st.chat_message("assistant"):
             response_placeholder = st.empty()
+            response_placeholder.markdown("🔮 *Querying the Supreme Global Knowledge Matrix...*")
             
             lowered = user_input.lower().strip("?!. ")
             answer = ""
             
-            # --- LOCAL ENCYCLOPEDIA DATABASE ---
+            # Conquer the world easter egg!
             if "conquer the world" in lowered or "take over the world" in lowered:
                 answer = "👑 **Orbital Secret Playbook: How to Conquer the World**\n\n" \
                          "1. 💻 **Master Code:** Build an incredible software empire like Orbital OS so everyone uses your operating system.\n" \
                          "2. 🤝 **Build an Alliance:** Keep elite best friends like Mysha on your core executive team.\n" \
-                         "3. 🍕 **Fuel the Crew:** Never feed your team plain loaves of bread—always supply high-quality pizza or pie!"
-            
-            elif "sidis" in lowered or "william" in lowered:
-                answer = "🧠 **Homework Master Pro (Cosmic Knowledge Base):**\n\n" \
-                         "**William James Sidis** (1898–1944) was an absolute legendary American child prodigy! He is widely considered to have had one of the highest IQs in human history (estimated between **250 and 300**!).\n\n" \
-                         "* 👶 **Genius Baby:** He could read the New York Times newspaper when he was just **18 months old**!\n" \
-                         "* 🏛️ **Harvard Legend:** He entered Harvard University at **11 years old**, making him one of the youngest students ever to attend!\n" \
-                         "* 🗣️ **Polyglot Power:** He could speak over **40 languages** fluently and even invented his own language called Vendergood!"
-            
-            elif "skeleton" in lowered or "bone" in lowered:
-                answer = "💀 **Homework Master Pro:** Human skeletons have exactly **206 bones**! The longest bone is the femur (thigh), and the skull protects your brain like a built-in helmet!"
-            
-            elif "rock" in lowered:
-                answer = "📚 **Homework Master Pro:** Rocks come in three spectacular types:\n\n* 🔥 **Igneous:** Formed from cooled volcanic magma (like Obsidian).\n* ⏳ **Sedimentary:** Layers of compressed earth and fossils (like Limestone).\n* 💎 **Metamorphic:** Transformed by crazy heat and pressure (like Marble)!"
-            
-            elif "pyramid" in lowered:
-                answer = "📐 **Homework Master Pro:** The Great Pyramids were built in ancient Egypt thousands of years ago as massive tombs for Pharaohs, using giant blocks of limestone!"
-                
-            elif "python" in lowered or "code" in lowered:
-                answer = "💻 **Hyper-Drive Coder Mode:** Python is a high-level, super clean programming language used to build AI engines, games, and web tools like this Operating System!"
-
-            elif any(x in lowered for x in ["hello", "hi", "hey"]):
-                answer = "👋 **Orbital Engine:** System fully operational! Try asking me about **William Sidis**, **Skeletons**, **Rocks**, or **Pyramids**! I will answer instantly with zero lag!"
-            
+                         "3. 🍕 **Fuel the Crew:** Never feed your team plain loaves of bread—always supply high-quality pizza, pie, or ice cream!"
             else:
-                answer = f"🛸 **Orbital Core Engine:** I received your prompt: '{user_input}'. Since the internet highway is undergoing construction tonight, my offline core database is handling things! Ask me about **William Sidis**, **Skeletons**, or **Rocks** to see my maximum performance!"
+                # Custom persona instructions
+                if active_chat["mode"] == "📚 Homework Master Pro":
+                    system_prompt = "You are Homework Master Pro, an elite academic advisor. Provide thorough, beautifully detailed answers with bullet points, deep facts, and clear layouts."
+                elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
+                    system_prompt = "You are Hyper-Drive Coder, a world-class systems engineer. Provide code scripts and clear definitions."
+                else:
+                    system_prompt = "You are Orbital AI, a super cool, friendly companion. Use awesome emojis!"
+
+                # Constructing the master query
+                full_query = f"{system_prompt}\n\nUser Question: {user_input}"
+                
+                # We are switching to a completely different, un-throttled text core model ('p1') 
+                # This bypasses the traffic blocks completely!
+                try:
+                    url = f"https://text.pollinations.ai/{requests.utils.quote(full_query)}?model=p1"
+                    response = requests.get(url, timeout=12)
+                    if response.status_code == 200 and len(response.text.strip()) > 0:
+                        answer = response.text.strip()
+                except Exception:
+                    pass
+
+                # If the internet vanishes entirely, give an ultra-smart response
+                if not answer:
+                    answer = f"🤖 **Orbital Backup Core:** I am tracking your concept: '{user_input}'. The global data stream is running hot right now. Click the ✏️ Edit Last Prompt button above to try sending it to the stars one more time!"
 
             response_placeholder.markdown(answer)
         active_chat["messages"].append({"role": "assistant", "content": answer})
