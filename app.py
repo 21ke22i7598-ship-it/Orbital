@@ -4,17 +4,21 @@ import random
 # --- 1. CONFIGURATION & APP INITIALIZATION ---
 st.set_page_config(page_title="Orbital OS", page_icon="🚀", layout="wide")
 
-st.title("🚀 Orbital OS: The Ultimate AI Engine")
-st.write("Coded by an elite 9-year-old software architect. Grand Presentation Version!")
+st.title("🚀 Orbital OS: Executive Master Edition")
+st.write("Coded by an elite 9-year-old software architect. Armed with Session Deletion & Edit Triggers!")
 
-# Initialize master storage structure
+# Initialize master database structures
 if "all_chats" not in st.session_state:
     st.session_state.all_chats = {}
 
 if "current_chat_id" not in st.session_state:
     st.session_state.current_chat_id = None
 
-# --- 2. SIDEBAR MULTI-SESSION MANAGER ---
+# Variable to help us pass text back for editing
+if "edit_buffer" not in st.session_state:
+    st.session_state.edit_buffer = ""
+
+# --- 2. SIDEBAR MULTI-SESSION MANAGER (WITH DELETION) ---
 with st.sidebar:
     st.header("🧠 Core Control Center")
     
@@ -39,26 +43,56 @@ with st.sidebar:
     if st.session_state.all_chats and st.session_state.current_chat_id not in st.session_state.all_chats:
         st.session_state.current_chat_id = list(st.session_state.all_chats.keys())[-1]
 
+    # Render navigation list with custom Delete buttons next to them using columns
     for chat_id, chat_data in list(st.session_state.all_chats.items()):
         emoji = "💬"
         if chat_data["mode"] == "📚 Homework Master Pro": emoji = "📚"
         elif chat_data["mode"] == "💻 Hyper-Drive Coder Mode": emoji = "💻"
         
-        if st.button(f"{emoji} {chat_data['title']}", key=f"nav_{chat_id}", use_container_width=True):
-            st.session_state.current_chat_id = chat_id
-            st.rerun()
+        col_btn, col_del = st.columns([0.8, 0.2])
+        
+        # Column A: Click to switch to this conversation
+        with col_btn:
+            if st.button(f"{emoji} {chat_data['title']}", key=f"nav_{chat_id}", use_container_width=True):
+                st.session_state.current_chat_id = chat_id
+                st.rerun()
+        
+        # Column B: Click to instantly wipe this conversation from memory bank!
+        with col_del:
+            if st.button("🗑️", key=f"del_{chat_id}", help="Delete this chat session permanently"):
+                del st.session_state.all_chats[chat_id]
+                if st.session_state.current_chat_id == chat_id:
+                    st.session_state.current_chat_id = None
+                st.rerun()
 
 # --- 3. RENDERING THE ACTIVE CONVERSATION COMPONENT ---
 if st.session_state.current_chat_id:
     active_chat = st.session_state.all_chats[st.session_state.current_chat_id]
-    st.caption(f"Active Mode Pipeline: **{active_chat['mode']}**")
+    st.caption(f"Active Mode Pipeline: **{active_chat['mode']}** | Active Thread ID: `{st.session_state.current_chat_id}`")
     
     for msg in active_chat["messages"]:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
             
-    # --- 4. INSTANT LOCAL THINKING ENGINE ---
-    if user_input := st.chat_input("Input prompt parameters..."):
+    # --- 4. THE EDIT PROMPT COMPONENT ---
+    # If there is at least one message from the user, give them an option to edit it!
+    user_messages = [m for m in active_chat["messages"] if m["role"] == "user"]
+    if user_messages:
+        last_user_text = user_messages[-1]["content"]
+        if st.button(f"✏️ Edit Last Prompt: \"{last_user_text[:30]}...\"", help="Click to load this back into your entry box"):
+            st.session_state.edit_buffer = last_user_text
+            # Remove the last user prompt and the last AI response so we can overwrite them cleanly
+            active_chat["messages"] = active_chat["messages"][:-2]
+            st.rerun()
+
+    # --- 5. INSTANT LOCAL THINKING ENGINE ---
+    # We pass our edit buffer text here if the user clicked edit
+    default_text = st.session_state.edit_buffer
+    
+    if user_input := st.chat_input("Input prompt parameters...", key="chat_box"):
+        # Clear the edit buffer now that it's been sent
+        st.session_state.edit_buffer = ""
+        
         with st.chat_message("user"):
             st.markdown(user_input)
         active_chat["messages"].append({"role": "user", "content": user_input})
@@ -116,5 +150,9 @@ if st.session_state.current_chat_id:
             st.markdown(answer)
         active_chat["messages"].append({"role": "assistant", "content": answer})
         st.rerun()
+
+    # If an edit buffer was loaded, let the user know via a small pop-up alert box
+    if default_text:
+        st.info(f"📋 **Prompt loaded for rewrite:** \"{default_text}\" — Go ahead and re-type your corrected prompt into the input bar below!")
 else:
     st.info("💡 Welcome to your control deck! Click '➕ Start New Chat Thread' in the sidebar to launch a dynamic AI instance.")
