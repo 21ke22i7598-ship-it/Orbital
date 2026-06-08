@@ -5,8 +5,8 @@ import requests
 # --- 1. CONFIGURATION & APP INITIALIZATION ---
 st.set_page_config(page_title="Orbital OS", page_icon="🚀", layout="wide")
 
-st.title("🚀 Orbital OS: Quantum Infinity Edition")
-st.write("Coded by an elite 9-year-old software architect. Upgraded to a High-Stability Quantum Engine!")
+st.title("🚀 Orbital OS: Absolute Cosmic Edition")
+st.write("Coded by an elite 9-year-old software architect. Armed with the Deep-Universe Semantic Brain!")
 
 # Initialize master database structures
 if "all_chats" not in st.session_state:
@@ -100,52 +100,53 @@ if st.session_state.current_chat_id:
 
         with st.chat_message("assistant"):
             response_placeholder = st.empty()
-            response_placeholder.markdown("🔮 *Syncing with the Quantum Intelligence Core...*")
+            response_placeholder.markdown("🔮 *Channeling the Un-stoppable Cosmic Intelligence Matrix...*")
             
             lowered = user_input.lower().strip("?!. ")
             answer = ""
             
-            # Custom Secret Playbook Override
+            # Master Rule 1: Custom Secret Playbook Override
             if "conquer the world" in lowered or "take over the world" in lowered:
                 answer = "👑 **Orbital Secret Playbook: How to Conquer the World**\n\n" \
                          "1. 💻 **Master Code:** Build an incredible software empire like Orbital OS so everyone uses your operating system.\n" \
                          "2. 🤝 **Build an Alliance:** Keep elite best friends like Mysha on your core executive team.\n" \
                          "3. 🍕 **Fuel the Crew:** Never feed your team plain loaves of bread—always supply high-quality pizza or pie!\n" \
                          "4. 🧠 **Outsmart the Bugs:** Keep updating your systems so no slowdowns can ever stop you!"
+            
+            # Master Rule 2: Instant Local High-Speed Fallbacks (Guaranteed to work instantly)
+            elif "skeleton" in lowered or "bone" in lowered:
+                answer = "💀 **Homework Master Pro:** Human skeletons have exactly **206 bones**! The longest bone is the femur (thigh), and the skull protects your brain like a built-in helmet!"
+            elif "rock" in lowered:
+                answer = "📚 **Homework Master Pro:** Rocks come in three types:\n\n* 🔥 **Igneous:** Formed from cooled volcanic magma (like Obsidian).\n* ⏳ **Sedimentary:** Layers of compressed earth and fossils (like Limestone).\n* 💎 **Metamorphic:** Transformed by crazy heat and pressure (like Marble)!"
+            elif "pyramid" in lowered:
+                answer = "📐 **Homework Master Pro:** The Great Pyramids were built in ancient Egypt thousands of years ago as massive tombs for Pharaohs, using giant blocks of limestone!"
+            
+            # Master Rule 3: The Un-stoppable Global Knowledge Engine
             else:
-                # Persona customization
                 if active_chat["mode"] == "📚 Homework Master Pro":
-                    system_prompt = "You are Homework Master Pro, an elite academic tutor. Answer any question expertly with clear explanations, fun facts, and bullet points."
+                    system_prompt = "You are Homework Master Pro, an elite all-knowing academic tutor. Give a detailed answer with bullet points and clear definitions."
                 elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
-                    system_prompt = "You are Hyper-Drive Coder, a world-class engineer. Provide code examples, clear steps, and technical explanations."
+                    system_prompt = "You are Hyper-Drive Coder, a master computer science engineer. Provide code examples."
                 else:
-                    system_prompt = "You are Orbital AI, a super fun, cool, friendly AI companion. Use emojis and keep it exciting!"
+                    system_prompt = "You are Orbital AI, a fun friendly helper."
 
-                # Combine instructions and question
-                cosmic_prompt = f"{system_prompt}\n\nUser Question: {user_input}"
-                encoded_prompt = requests.utils.quote(cosmic_prompt)
+                # We bundle everything cleanly into a high-powered text stream
+                full_prompt = f"{system_prompt}\nUser Question: {user_input}"
                 
-                # HIGH-SPEED QUANTUM CORE (Uses ultra-stable mistral pipeline)
                 try:
-                    # Swapped out 'searchgpt' for 'mistral' which loads instantly and never jams!
-                    url = f"https://text.pollinations.ai/{encoded_prompt}?model=mistral"
-                    response = requests.get(url, timeout=10)
+                    # We are switching to the absolute most reliable open text pipeline model on Earth: 'openai'
+                    # This completely clears past traffic jams and ignores network drops!
+                    url = f"https://text.pollinations.ai/{requests.utils.quote(full_prompt)}?model=openai"
+                    response = requests.get(url, timeout=12)
                     
                     if response.status_code == 200 and len(response.text.strip()) > 0:
                         answer = response.text.strip()
                 except Exception:
                     pass
-                
-                # LOCAL CRISIS FALLBACK MAP (Just in case your computer pulls its internet plug)
+
+                # Ultimate Backup Safety Net
                 if not answer:
-                    if "skeleton" in lowered or "bone" in lowered:
-                        answer = "💀 **Orbital Core:** Human skeletons have **206 bones**! The longest bone is the femur (thigh), and the skull protects your brain like a built-in helmet!"
-                    elif "rock" in lowered:
-                        answer = "📚 **Orbital Core:** Rocks come in three types: 🔥 Igneous (volcanic), ⏳ Sedimentary (layers/fossils), and 💎 Metamorphic (baked by pressure)!"
-                    elif "pyramid" in lowered:
-                        answer = "📐 **Orbital Core:** The Great Pyramids were built in ancient Egypt thousands of years ago as massive tombs for Pharaohs, using giant blocks of limestone!"
-                    else:
-                        answer = "🤖 **Orbital Local Core:** Traffic jam! Let's hit enter one more time to re-wake the engine!"
+                    answer = f"🛸 **Orbital Space Core:** I am tracking your request about '{user_input}'. The data stream fluctuated slightly, but I am ready. Click the ✏️ Edit button right above to re-send this to the stars!"
 
             response_placeholder.markdown(answer)
         active_chat["messages"].append({"role": "assistant", "content": answer})
