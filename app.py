@@ -1,11 +1,12 @@
 import streamlit as st
 import random
+import requests
 
 # --- 1. CONFIGURATION & APP INITIALIZATION ---
 st.set_page_config(page_title="Orbital OS", page_icon="🚀", layout="wide")
 
-st.title("🚀 Orbital OS: Executive Master Edition")
-st.write("Coded by an elite 9-year-old software architect. Armed with Session Deletion & Edit Triggers!")
+st.title("🚀 Orbital OS: Infinity Edition")
+st.write("Coded by an elite 9-year-old software architect. Connected to the Universal Knowledge Stream!")
 
 # Initialize master database structures
 if "all_chats" not in st.session_state:
@@ -43,7 +44,7 @@ with st.sidebar:
     if st.session_state.all_chats and st.session_state.current_chat_id not in st.session_state.all_chats:
         st.session_state.current_chat_id = list(st.session_state.all_chats.keys())[-1]
 
-    # Render navigation list with custom Delete buttons next to them using columns
+    # Render navigation list with custom Delete buttons next to them
     for chat_id, chat_data in list(st.session_state.all_chats.items()):
         emoji = "💬"
         if chat_data["mode"] == "📚 Homework Master Pro": emoji = "📚"
@@ -51,13 +52,11 @@ with st.sidebar:
         
         col_btn, col_del = st.columns([0.8, 0.2])
         
-        # Column A: Click to switch to this conversation
         with col_btn:
             if st.button(f"{emoji} {chat_data['title']}", key=f"nav_{chat_id}", use_container_width=True):
                 st.session_state.current_chat_id = chat_id
                 st.rerun()
         
-        # Column B: Click to instantly wipe this conversation from memory bank!
         with col_del:
             if st.button("🗑️", key=f"del_{chat_id}", help="Delete this chat session permanently"):
                 del st.session_state.all_chats[chat_id]
@@ -68,29 +67,25 @@ with st.sidebar:
 # --- 3. RENDERING THE ACTIVE CONVERSATION COMPONENT ---
 if st.session_state.current_chat_id:
     active_chat = st.session_state.all_chats[st.session_state.current_chat_id]
-    st.caption(f"Active Mode Pipeline: **{active_chat['mode']}** | Active Thread ID: `{st.session_state.current_chat_id}`")
+    st.caption(f"Active Mode Pipeline: **{active_chat['mode']}**")
     
     for msg in active_chat["messages"]:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
             
     # --- 4. THE EDIT PROMPT COMPONENT ---
-    # If there is at least one message from the user, give them an option to edit it!
     user_messages = [m for m in active_chat["messages"] if m["role"] == "user"]
     if user_messages:
         last_user_text = user_messages[-1]["content"]
         if st.button(f"✏️ Edit Last Prompt: \"{last_user_text[:30]}...\"", help="Click to load this back into your entry box"):
             st.session_state.edit_buffer = last_user_text
-            # Remove the last user prompt and the last AI response so we can overwrite them cleanly
             active_chat["messages"] = active_chat["messages"][:-2]
             st.rerun()
 
-    # --- 5. INSTANT LOCAL THINKING ENGINE ---
-    # We pass our edit buffer text here if the user clicked edit
+    # --- 5. UNIVERSAL LIVE THINKING CORE ---
     default_text = st.session_state.edit_buffer
     
-    if user_input := st.chat_input("Input prompt parameters...", key="chat_box"):
-        # Clear the edit buffer now that it's been sent
+    if user_input := st.chat_input("Ask anything in the universe...", key="chat_box"):
         st.session_state.edit_buffer = ""
         
         with st.chat_message("user"):
@@ -104,55 +99,54 @@ if st.session_state.current_chat_id:
             active_chat["title"] = preview_name
 
         with st.chat_message("assistant"):
+            response_placeholder = st.empty()
+            response_placeholder.markdown("🔮 *Consulting the Universal Knowledge Matrix...*")
+            
             lowered = user_input.lower().strip("?!. ")
             
-            # ROUTINE A: THE ULTIMATE HOMEWORK TUTOR CORE
-            if active_chat["mode"] == "📚 Homework Master Pro":
-                if any(x in lowered for x in ["rock", "stone", "mineral"]):
-                    answer = "📚 **Homework Master Pro:** Rocks are amazing! There are three main types on Earth:\n\n1. 🔥 **Igneous:** Formed when super-hot melting magma cools down (like basalt or obsidian).\n2. ⏳ **Sedimentary:** Made when layers of sand, mud, and fossils get squished together over millions of years (like limestone).\n3. 💎 **Metamorphic:** Rocks that got completely baked and changed by intense underground heat and pressure (like marble!).\n\nType **'Examples'** to see real samples of each one, or type the name of a rock type to learn more!"
-                
-                elif "metamorphic" in lowered:
-                    answer = "💎 **Homework Master Pro (Metamorphic Deep-Dive):** Metamorphic rocks are the ultimate survivors! They started out as regular rocks, but intense heat from the Earth's core and massive pressure squished them until their crystals completely changed. \n\n* **Example:** Limestone transforms into beautiful **Marble**!\n* **Example:** Shale squishes into layers of **Slate**!"
-                
-                elif "igneous" in lowered:
-                    answer = "🔥 **Homework Master Pro (Igneous Deep-Dive):** Igneous means 'born of fire'! When volcanoes erupt, lava cools down super fast to create these.\n\n* **Obsidian:** Cools so fast it turns into smooth, shiny black volcanic glass!\n* **Pumice:** A rock filled with air bubbles from volcanic gas—it's so light it can actually float on water!"
-                
-                elif "sedimentary" in lowered:
-                    answer = "⏳ **Homework Master Pro (Sedimentary Deep-Dive):** These rocks are like regular time capsules! Rivers wash sand, bones, shells, and mud into lakes, where they stack up over millions of years until they harden into stone. This is where almost all **dinosaur fossils** are discovered!"
-                
-                elif "example" in lowered:
-                    answer = "🧱 **Homework Master Pro Rock Catalogue:** Here are the coolest real-world examples to show your friends:\n\n* 🔥 **Igneous:** Granite (kitchen counters), Obsidian (sharp volcanic glass), Pumice (floating rock).\n* ⏳ **Sedimentary:** Sandstone, Limestone (made of old sea shells), Coal.\n* 💎 **Metamorphic:** Marble (statues), Slate (roof shingles), Quartzite."
-                
-                elif any(x in lowered for x in ["math", "solve", "+", "-", "*", "/", "="]):
-                    answer = "🔢 **Homework Master Pro:** Math mode engaged! Remember to follow **PEMDAS**. Drop your numbers right here and let's calculate!"
-                else:
-                    answer = f"📚 **Homework Master Pro:** Great topic! Let's study '{user_input}'. What specific homework question do you want to master right now?"
-            
-            # ROUTINE B: HIGH-SPEED PROGRAMMING CORE
-            elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
-                if "python" in lowered or "code" in lowered or "streamlit" in lowered:
-                    answer = "💻 **Hyper-Drive Coder:** Python matrix online! Make sure your indentation has exactly 4 spaces and your text strings close with matching quotes (`'...'`). Drop a script block below if you want an automated code review!"
-                else:
-                    answer = f"💻 **Hyper-Drive Coder:** Coding algorithm loaded for '{user_input}'. Want me to generate a clean Python example structure for this? Type 'Show me code'!"
-            
-            # ROUTINE C: CHILL FRIEND CORE
+            # Custom Fun Override: Tips to conquer the world!
+            if "conquer the world" in lowered or "take over the world" in lowered:
+                answer = "👑 **Orbital Secret Playbook: How to Conquer the World**\n\n" \
+                         "1. 💻 **Master Code:** Build an incredible software empire like Orbital OS so everyone uses your operating system.\n" \
+                         "2. 🤝 **Build an Alliance:** Keep elite best friends like Mysha on your core executive team.\n" \
+                         "3. 🍕 **Fuel the Crew:** Never feed your team plain loaves of bread—always supply high-quality pizza or pie!\n" \
+                         "4. 🧠 **Outsmart the Bugs:** Keep updating your systems so no slowdowns can ever stop you!"
             else:
-                if lowered in ["hello", "hi", "hey", "yo"]:
-                    answer = "Hey! Welcome to the control center. Your system is fully upgraded and running smoothly!"
-                elif "joke" in lowered:
-                    answer = random.choice([
-                        "Why do programmers prefer dark mode? Because light attracts bugs! 🐜",
-                        "Why did the computer go to the doctor? Because it had a virus! 🖥️"
-                    ])
+                # Setup specific rules for the global brain based on persona
+                if active_chat["mode"] == "📚 Homework Master Pro":
+                    system_prompt = "You are Homework Master Pro, an elite academic tutor. Answer any question expertly with bullet points and examples."
+                elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
+                    system_prompt = "You are Hyper-Drive Coder, a world-class engineer. Provide code examples, clear steps, and technical explanations."
                 else:
-                    answer = "💬 **Orbital AI:** That sounds super interesting! What should we test out on our dashboard next?"
+                    system_prompt = "You are Orbital AI, a super fun, cool, friendly AI companion. Use emojis and keep it exciting!"
 
-            st.markdown(answer)
+                # Construct the cosmic prompt
+                cosmic_prompt = f"{system_prompt}\n\nUser Question: {user_input}"
+                
+                try:
+                    # High-stability direct text engine
+                    url = f"https://text.pollinations.ai/{requests.utils.quote(cosmic_prompt)}"
+                    response = requests.get(url, params={"model": "searchgpt", "json": "false"}, timeout=12)
+                    
+                    if response.status_code == 200 and len(response.text.strip()) > 0:
+                        answer = response.text.strip()
+                    else:
+                        raise Exception("Matrix link dropped")
+                        
+                except Exception:
+                    # Emergency hyper-fast local backup map if the internet drops
+                    if "rock" in lowered:
+                        answer = "📚 **Orbital Core:** Rocks come in three types: 🔥 Igneous (volcanic), ⏳ Sedimentary (layers/fossils), and 💎 Metamorphic (baked by pressure)!"
+                    elif any(x in lowered for x in ["hello", "hi", "hey"]):
+                        answer = "👋 **Orbital Core:** System online! The global brain is ready. Ask me any concept in history, science, or math!"
+                    else:
+                        answer = f"🤖 **Orbital Local Core:** The cosmic gateway took too long to respond, but your local computer engine is standing by! I am tracking your concept: '{user_input}'. Try hitting enter once more to re-ping the global stream!"
+
+            response_placeholder.markdown(answer)
         active_chat["messages"].append({"role": "assistant", "content": answer})
         st.rerun()
 
-    # If an edit buffer was loaded, let the user know via a small pop-up alert box
     if default_text:
-        st.info(f"📋 **Prompt loaded for rewrite:** \"{default_text}\" — Go ahead and re-type your corrected prompt into the input bar below!")
+        st.info(f"📋 **Prompt loaded for rewrite:** \"{default_text}\"")
 else:
     st.info("💡 Welcome to your control deck! Click '➕ Start New Chat Thread' in the sidebar to launch a dynamic AI instance.")
