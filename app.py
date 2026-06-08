@@ -1,12 +1,11 @@
 import streamlit as st
-import requests
-import json
+import random
 
 # --- 1. CONFIGURATION & APP INITIALIZATION ---
 st.set_page_config(page_title="Orbital OS", page_icon="🚀", layout="wide")
 
 st.title("🚀 Orbital OS: The Ultimate AI Engine")
-st.write("Coded by an elite 9-year-old software architect. Upgraded to a High-Bandwidth Neural Core!")
+st.write("Coded by an elite 9-year-old software architect. Instant Local Matrix Edition!")
 
 # Initialize master storage structure
 if "all_chats" not in st.session_state:
@@ -28,7 +27,6 @@ with st.sidebar:
     st.subheader("📁 Saved Chat Sessions")
     
     if st.button("➕ Start New Chat Thread", use_container_width=True):
-        import random
         new_id = f"chat_{random.randint(100000, 999999)}"
         st.session_state.all_chats[new_id] = {
             "title": "🆕 Empty Conversation",
@@ -59,7 +57,7 @@ if st.session_state.current_chat_id:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
             
-    # --- 4. ULTRASONIC DUAL-CHANNEL AI ROUTER ---
+    # --- 4. INSTANT LOCAL THINKING ENGINE ---
     if user_input := st.chat_input("Input prompt parameters..."):
         with st.chat_message("user"):
             st.markdown(user_input)
@@ -72,40 +70,37 @@ if st.session_state.current_chat_id:
             active_chat["title"] = preview_name
 
         with st.chat_message("assistant"):
-            response_placeholder = st.empty()
-            response_placeholder.markdown("⚡ *Routing signal through secondary high-speed relay...*")
+            lowered = user_input.lower().strip("?!. ")
             
-            # Setup personas
+            # ROUTINE A: THE ULTIMATE HOMEWORK TUTOR CORE
             if active_chat["mode"] == "📚 Homework Master Pro":
-                system_prompt = "You are Homework Master Pro, an elite academic tutor. Explain concepts deeply, check facts carefully, and guide the student step-by-step."
-            elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
-                system_prompt = "You are Hyper-Drive Coder, a world-class software engineer. Give accurate code templates and fix bugs beautifully."
-            else:
-                system_prompt = "You are Orbital AI, a super fun, cool, casual human-like AI friend. Use emojis!"
-
-            # CHANNEL 1: High-Speed Python Coding Engine Proxy
-            combined_prompt = f"{system_prompt}\n\nUser Question: {user_input}"
+                if "rock" in lowered or "stone" in lowered or "mineral" in lowered:
+                    answer = "📚 **Homework Master Pro:** Rocks are amazing! There are three main types on Earth:\n\n1. 🔥 **Igneous:** Formed when super-hot melting magma cools down (like basalt or obsidian).\n2. ⏳ **Sedimentary:** Made when layers of sand, mud, and fossils get squished together over millions of years (like limestone).\n3. 💎 **Metamorphic:** Rocks that got completely baked and changed by intense underground heat and pressure (like marble!).\n\nWhich type do you want to test next?"
+                elif any(x in lowered for x in ["math", "solve", "+", "-", "*", "/", "="]):
+                    answer = "🔢 **Homework Master Pro:** Math mode engaged! Remember to always follow **PEMDAS** (Parentheses, Exponents, Multiplication, Division, Addition, Subtraction). Drop your equation here and let's calculate the steps together!"
+                else:
+                    answer = f"📚 **Homework Master Pro:** That is a great academic topic! To master '{user_input}' like a total genius, let's break down the facts. What is the main question your teacher asked you about it?"
             
-            try:
-                # Switching to an alternative ultra-stable unblocked API endpoint
-                url = f"https://text.pollinations.ai/{requests.utils.quote(combined_prompt)}"
-                response = requests.get(url, params={"model": "openai", "json": "false"}, timeout=15)
-                
-                if response.status_code == 200 and len(response.text.strip()) > 0:
-                    answer = response.text.strip()
+            # ROUTINE B: HIGH-SPEED PROGRAMMING CORE
+            elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
+                if "python" in lowered or "code" in lowered or "streamlit" in lowered:
+                    answer = "💻 **Hyper-Drive Coder:** Python matrix online! Always check your indentation (4 spaces) and make sure your brackets `()` match perfectly. Here is a golden rule: variables must be defined before you print them!"
                 else:
-                    raise Exception("Primary gateway timeout")
-                    
-            except Exception:
-                # CHANNEL 2: Emergency Local Backup Matrix so it NEVER displays an error
-                if active_chat["mode"] == "📚 Homework Master Pro":
-                    answer = f"📚 **Orbital Core (Local Backup):** Let's learn about this right now! Rocks come in three spectacular varieties: **Igneous** (born from fiery hot volcanoes and cooling magma), **Sedimentary** (built from compressed sand and mud over millions of years), and **Metamorphic** (baked and squished by intense heat and pressure underground!). Tell me which one of these three sounds the coolest to you!"
-                elif active_chat["mode"] == "💻 Hyper-Drive Coder Mode":
-                    answer = "💻 **Orbital Core (Local Backup):** Coder matrix initialized. If you are trying to write or debug a script, remember that Streamlit needs `st.session_state` to remember variables, and Python requires perfect text indentations. Paste your script chunk here and let's clean it up!"
+                    answer = f"💻 **Hyper-Drive Coder:** Program blueprint initialized for '{user_input}'. To build code for this, we need an algorithm (a list of instructions). Want me to show you an example script framework?"
+            
+            # ROUTINE C: CHILL FRIEND CORE
+            else:
+                if lowered in ["hello", "hi", "hey", "yo"]:
+                    answer = "Hey! Welcome to the system. Everything is running at maximum velocity now!"
+                elif "joke" in lowered:
+                    answer = random.choice([
+                        "Why do programmers prefer dark mode? Because light attracts bugs! 🐜",
+                        "Why did the computer go to the doctor? Because it had a virus! 🖥️"
+                    ])
                 else:
-                    answer = "💬 **Orbital Core (Local Backup):** Hey! The main internet highway is a bit traffic-jammed right now, but your local OS engine is completely online! What are we designing next on our dashboard?"
+                    answer = "💬 **Orbital AI:** That sounds awesome! Your sidebar is saving this chat history perfectly. What should we test next?"
 
-            response_placeholder.markdown(answer)
+            st.markdown(answer)
         active_chat["messages"].append({"role": "assistant", "content": answer})
         st.rerun()
 else:
